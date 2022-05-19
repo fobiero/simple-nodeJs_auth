@@ -28,7 +28,22 @@ app.post('/users', async (req, res) => {
         res.status(500).send()
     }
 
-   
 });
+
+app.post('/users/login', async (req, res) => {
+    const user = users.find(user => user.name = req.body.name)
+    if(user == null ) {
+        return res.status(400).send('Invalid User')
+    }
+    try {
+       if(await bcrypt.compare(req.body.password, user.password)) {
+           res.send('Login Success')
+       } else { 
+           res.send('Password do not match')
+       }
+    } catch {
+        res.status(500).send()
+    }
+})
 
 app.listen(3000)
